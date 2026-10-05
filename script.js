@@ -184,6 +184,7 @@
   const sctx = staticEl.getContext("2d");
   let staticUntil = 0;
   let staticRunning = false;
+  let staticClear;
 
   function sizeStatic() {
     staticEl.width = Math.ceil(innerWidth / 2);
@@ -197,6 +198,10 @@
     if (reduceMotion) return;
     staticUntil = Math.max(staticUntil, performance.now() + ms);
     staticEl.style.opacity = level;
+    // Hide on a timer too: animation frames pause in background tabs and
+    // would otherwise leave the static stuck on screen.
+    clearTimeout(staticClear);
+    staticClear = setTimeout(() => (staticEl.style.opacity = 0), staticUntil - performance.now());
     if (band) {
       const top = between(0, 75);
       staticEl.style.clipPath = `inset(${top}% 0 ${Math.max(0, 100 - top - between(6, 30))}% 0)`;
@@ -384,22 +389,27 @@
     body.classList.remove("flooding");
     setTimeout(() => glitchBurst(), 3200);
 
+    staticEl.style.opacity = 0;
+
     // Try autoplay with sound; browsers often block that, so fall back to muted.
-    try {
-      video.muted = false;
-      await video.play();
-    } catch {
+    // Never wait on play(): if it hasn't started shortly, offer a button.
+    video.muted = false;
+    video.play().catch(() => {
       video.muted = true;
-      try { await video.play(); } catch {}
-      unmute.classList.remove("hidden");
-    }
+      video.play().catch(() => {});
+    });
+    setTimeout(() => {
+      if (video.paused) unmute.textContent = "Tap to play";
+      if (video.paused || video.muted) unmute.classList.remove("hidden");
+    }, 2500);
   }
 
   $("unmute").addEventListener("click", () => {
     const v = $("video");
+    const wasPaused = v.paused;
     v.muted = false;
-    v.currentTime = 0;
-    v.play();
+    if (!wasPaused) v.currentTime = 0;
+    v.play().catch(() => {});
     $("unmute").classList.add("hidden");
   });
 

@@ -7,7 +7,7 @@ window.ZENTARA_CONFIG = {
   revealAt: "2026-11-10T18:00:00+05:30",
 
   // Path to your video (put the file in the /video folder).
-  videoSrc: "video/reveal.mp4",
+  videoSrc: "video/video.mp4",
 
   // Optional poster image shown before the video starts ("" to disable).
   videoPoster: "",
