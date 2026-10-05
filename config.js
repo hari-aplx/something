@@ -4,7 +4,7 @@
 window.ZENTARA_CONFIG = {
   // When the reveal happens. Use ISO format with your timezone offset.
   // Example: "2026-12-12T18:00:00+05:30" = 12 Dec 2026, 6:00 PM IST
-  revealAt: "2026-11-10T18:00:00+05:30",
+  revealAt: "2026-10-06T15:00:00+05:30",
 
   // Path to your video (put the file in the /video folder).
   videoSrc: "video/video.mp4",
@@ -13,7 +13,7 @@ window.ZENTARA_CONFIG = {
   videoPoster: "",
 
   // Small line above the title ("" to hide).
-  tagline: "10 · 11 · 26",
+  tagline: "",
 
   // The main title that emerges from the darkness.
   codename: "Are You Ready?",
