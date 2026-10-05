@@ -62,6 +62,9 @@ window.ZENTARA_CONFIG = {
     "until the lights go on"
   ],
 
+  // Notification text sent with 1 minute left (to people who allowed it).
+  alertMessage: "One minute. Look now.",
+
   // Message shown after the reveal, above the video.
   revealHeadline: "THE WAIT IS OVER",
 };

@@ -123,8 +123,16 @@
       finalEl.textContent = sec + 1;
       restartAnim(finalEl, "beat");
     }
+
+    // Last minute: alert once, and flash the tab title so it's seen from other tabs
+    if (sec < 60) {
+      lastMinuteAlert();
+      document.title = sec % 2 ? `● 0:${pad(sec)}` : "LOOK NOW";
+    }
   }
 
+  // People who arrive inside the final minute are already watching; don't alert them
+  let alerted = target - now() <= 60000;
   const countdownTimer = setInterval(tick, 200);
   tick();
 
@@ -289,6 +297,59 @@
     setTimeout(glitchLoop, final ? between(500, 1400) : between(2200, 6500));
   }
   setTimeout(glitchLoop, 4500);
+
+  // ── Last-minute alert ────────────────────────────
+  // Works only while the page is open (any tab). Vibration is Android-only;
+  // system notifications need the visitor to have tapped "signal me".
+  let swReg = null;
+  const canNotify = "Notification" in window && "serviceWorker" in navigator;
+
+  function registerSW() {
+    return navigator.serviceWorker.register("sw.js").then((r) => (swReg = r)).catch(() => {});
+  }
+
+  function lastMinuteAlert() {
+    if (alerted || revealed) return;
+    alerted = true;
+    $("alert-me").classList.add("gone");
+    glitchBurst(true);
+    if (navigator.vibrate) navigator.vibrate([300, 120, 300, 120, 800]);
+    if (canNotify && Notification.permission === "granted" && swReg) {
+      swReg.showNotification(cfg.codename, {
+        body: cfg.alertMessage || "One minute left.",
+        tag: "zentara-final",
+        renotify: true,
+        requireInteraction: true,
+        vibrate: [300, 120, 300, 120, 800],
+      });
+    }
+  }
+
+  // Background tabs throttle the 200ms ticker, so also set a dedicated timer.
+  // (Browsers cap setTimeout at ~24 days, so re-arm hourly until close.)
+  function scheduleAlert() {
+    const d = target - now() - 60000;
+    if (d <= 0) return;
+    setTimeout(d > 3600000 ? scheduleAlert : lastMinuteAlert, Math.min(d, 3600000));
+  }
+  scheduleAlert();
+
+  const alertBtn = $("alert-me");
+  if (canNotify && !alerted) {
+    if (Notification.permission === "granted") registerSW();
+    else if (Notification.permission === "default") alertBtn.classList.remove("hidden");
+  }
+  alertBtn.addEventListener("click", async () => {
+    const p = await Notification.requestPermission();
+    if (p === "granted") {
+      await registerSW();
+      alertBtn.textContent = "● you will be signalled";
+    } else {
+      alertBtn.textContent = "○ signal declined";
+    }
+    alertBtn.disabled = true;
+    setTimeout(() => alertBtn.classList.add("gone"), 2200);
+  });
 
   // ── Reveal: glitch, light floods in, then the video ──
   async function reveal() {

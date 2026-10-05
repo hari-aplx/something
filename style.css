@@ -204,6 +204,28 @@ body.revealed { overflow-y: auto; }
 .whisper .ch { filter: blur(6px); animation-duration: 1.6s; }
 .whisper.out { opacity: 0; filter: blur(6px); }
 
+.alert-me {
+  position: absolute;
+  left: 50%;
+  bottom: max(1.6rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  opacity: 0;
+  animation: fade 2s ease 5s forwards;
+  transition: color 0.4s ease, opacity 1s ease;
+}
+.alert-me:hover { color: var(--ink); }
+.alert-me.gone { opacity: 0 !important; pointer-events: none; animation: none; }
+
 /* ── Final 10 seconds ───────────────────────────── */
 .final-num {
   position: absolute;
