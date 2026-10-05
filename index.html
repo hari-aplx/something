@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050506" />
+  <meta name="robots" content="noindex" />
+  <title>· · ·</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="smoke" aria-hidden="true"></canvas>
+  <div class="beam" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="rollbar" aria-hidden="true"></div>
+  <canvas id="static" class="static" aria-hidden="true"></canvas>
+  <div class="tears" aria-hidden="true">
+    <div class="tear"></div><div class="tear"></div><div class="tear"></div>
+    <div class="tear"></div><div class="tear"></div><div class="tear"></div>
+  </div>
+  <div id="sub" class="sub" aria-hidden="true"></div>
+
+  <!-- ── COUNTDOWN STAGE ───────────────────────────── -->
+  <main id="stage-countdown" class="stage">
+    <p id="tagline" class="tagline"></p>
+    <h1 id="title" class="title split"></h1>
+
+    <div class="count-wrap">
+      <div id="countdown" class="countdown">
+        <div class="unit"><span class="num" id="d">--</span><span class="lbl">Days</span></div>
+        <span class="dot">·</span>
+        <div class="unit"><span class="num" id="h">--</span><span class="lbl">Hours</span></div>
+        <span class="dot">·</span>
+        <div class="unit"><span class="num" id="m">--</span><span class="lbl">Minutes</span></div>
+        <span class="dot">·</span>
+        <div class="unit"><span class="num" id="s">--</span><span class="lbl">Seconds</span></div>
+      </div>
+      <div id="final" class="final-num" aria-live="assertive"></div>
+    </div>
+
+    <p id="whisper" class="whisper"></p>
+  </main>
+
+  <!-- ── REVEAL STAGE ──────────────────────────────── -->
+  <section id="stage-reveal" class="stage hidden" aria-hidden="true">
+    <h2 id="reveal-headline" class="title split reveal-title"></h2>
+    <div class="frame">
+      <video id="video" playsinline controls preload="none"></video>
+      <button id="unmute" class="unmute hidden">Tap for sound</button>
+    </div>
+  </section>
+
+  <div class="flood" aria-hidden="true"></div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
