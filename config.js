@@ -66,5 +66,5 @@ window.ZENTARA_CONFIG = {
   alertMessage: "One minute. Look now.",
 
   // Message shown after the reveal, above the video.
-  revealHeadline: "THE WAIT IS OVER",
+  revealHeadline: "You're Invited!",
 };
