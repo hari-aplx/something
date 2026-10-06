@@ -108,7 +108,7 @@
   function tick() {
     const diff = target - now();
     if (diff <= 0) {
-      reveal();
+      reveal(now() - target > 5000);
       return;
     }
     const sec = Math.floor(diff / 1000);
@@ -357,7 +357,7 @@
   });
 
   // ── Reveal: glitch, light floods in, then the video ──
-  async function reveal() {
+  async function reveal(immediate = false) {
     if (revealed) return;
     clearInterval(countdownTimer);
     clearTimeout(whisperStart);
@@ -372,10 +372,12 @@
     if (cfg.videoPoster) video.poster = cfg.videoPoster;
     video.preload = "auto";
 
-    await glitchBurst(true);
+    if (!immediate) await glitchBurst(true);
     revealed = true;
-    body.classList.add("flooding");
-    await wait(2000);
+    if (!immediate) {
+      body.classList.add("flooding");
+      await wait(2000);
+    }
 
     body.classList.remove("final");
     $("stage-countdown").classList.add("hidden");
